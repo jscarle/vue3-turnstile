@@ -1,2 +1,3 @@
-# vue-turnstile
+# @jscarle/vue3-turnstile
+
 A Vue 3 TypeScript Component for Cloudflare's Turnstile
