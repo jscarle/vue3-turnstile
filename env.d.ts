@@ -8,13 +8,13 @@ import type {
   Theme,
   WidgetSize,
 } from '@/types/turnstile';
-import type { TurnstileLanguage } from '@/TurnstileWidget.vue';
+import type { Language } from '@/TurnstileWidget.vue';
 
 interface ImportMetaEnv {
   readonly VITE_TURNSTILE_SITEKEY?: string
   readonly VITE_TURNSTILE_LOGLEVEL?: 'debug' | 'info' | 'warn' | 'error'
   readonly VITE_TURNSTILE_THEME?: Theme
-  readonly VITE_TURNSTILE_LANGUAGE?: TurnstileLanguage
+  readonly VITE_TURNSTILE_LANGUAGE?: Language
   readonly VITE_TURNSTILE_TABINDEX?: number
   readonly VITE_TURNSTILE_SIZE?: WidgetSize
   readonly VITE_TURNSTILE_RETRY?: FailureRetryMode
