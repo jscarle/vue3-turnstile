@@ -16,39 +16,6 @@ Requires **Vue 3.5** or later and **@unhead/vue 2.0.12** or later.
 npm install @jscarle/vue3-turnstile
 ```
 
-## Getting Started
-
-Add the widget to your component and verify the returned token on your server:
-
-```vue
-<script setup lang="ts">
-import { TurnstileWidget } from '@jscarle/vue3-turnstile'
-const token = ref<string | null>(null)
-</script>
-
-<template>
-  <TurnstileWidget v-model="token" sitekey="your-site-key" />
-</template>
-```
-
-```ts
-// server verification example
-const params = new URLSearchParams()
-params.append('secret', 'your-secret-key')
-params.append('response', token)
-
-const result = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-  method: 'POST',
-  body: params,
-}).then(r => r.json())
-
-if (!result.success) {
-  // token is invalid
-}
-```
-
-Tokens must be validated within 300 seconds and cannot be reused.
-
 ## Usage
 
 ### Component usage
@@ -161,9 +128,9 @@ function onError(message: string) {
 </template>
 ```
 
-## Configuration via Environment Variables
-
-When a prop is omitted, its value can be supplied through Vite environment variables. The component reads the following variables:
+### Environment variables
+When a prop is omitted, its value can be supplied through Vite environment variables.
+The component reads the following variables:
 
 - `VITE_TURNSTILE_SITEKEY`
 - `VITE_TURNSTILE_LOGLEVEL`
@@ -205,6 +172,7 @@ const result = await fetch('https://challenges.cloudflare.com/turnstile/v0/sitev
 if (!result.success) {
   // token is invalid
 }
+Tokens must be validated within 300 seconds and cannot be reused.
 ```
 
 ## Contributing
