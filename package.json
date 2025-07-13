@@ -1,6 +1,7 @@
 {
   "name": "@jscarle/vue3-turnstile",
   "version": "1.0.0",
+  "description": "A Vue 3.5 TypeScript component for Cloudflare's Turnstile.",
   "private": false,
   "main": "./dist/vue3-turnstile.umd.js",
   "module": "./dist/vue3-turnstile.es.js",
@@ -17,6 +18,21 @@
   },
   "sideEffects": false,
   "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jscarle/vue3-turnstile"
+  },
+  "bugs": {
+    "url": "https://github.com/jscarle/vue3-turnstile/issues"
+  },
+  "homepage": "https://github.com/jscarle/vue3-turnstile#readme",
+  "keywords": [
+    "vue",
+    "turnstile",
+    "cloudflare",
+    "captcha"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "npm run clean && npm run type && vite build",
