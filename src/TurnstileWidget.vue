@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, watch, inject } from 'vue';
 import { useScript } from '@unhead/vue';
 import {
   type LogLevel,
@@ -8,11 +8,21 @@ import {
 } from '@/types.ts'
 import { type RenderParameters } from '@/turnstile.ts'
 import { ENV_DEFAULTS } from '@/setup.ts'
+import { TurnstileOptionsKey, type TurnstilePluginOptions } from '@/plugin'
 
 
 
 
 const props = withDefaults(defineProps<TurnstileProps>(), ENV_DEFAULTS);
+const pluginOptions = inject(
+  TurnstileOptionsKey,
+  {} as TurnstilePluginOptions,
+);
+const resolvedProps = computed((): TurnstileProps => ({
+  ...(pluginOptions as TurnstilePluginOptions),
+  ...props,
+}));
+const resolvedSitekey = computed(() => resolvedProps.value.sitekey);
 
 const model = defineModel<string | null>({ required: true });
 
@@ -48,7 +58,9 @@ if (typeof window !== 'undefined' && window.turnstile === undefined) {
 
 /** Check if a message should be logged for the current log level. */
 function isLogLevel(level: LogLevel): boolean {
-  return logLevelOrder[level] >= logLevelOrder[props.logLevel];
+  return (
+    logLevelOrder[level] >= logLevelOrder[resolvedProps.value.logLevel!]
+  );
 }
 
 const callback = (response: string) => {
@@ -76,7 +88,7 @@ const timeoutCallback = () => {
   model.value = null;
 };
 
-const watchedProps = computed((): TurnstileProps => props);
+const watchedProps = computed((): TurnstileProps => resolvedProps.value);
 
 const options = computed((): RenderParameters => {
   const { sitekey, ...rest } = watchedProps.value;
@@ -159,7 +171,7 @@ if (typeof window === 'undefined') {
 defineExpose(exposeDefinition);
 
 onMounted(async () => {
-  if (typeof window === 'undefined' || !props.sitekey) {
+  if (typeof window === 'undefined' || !resolvedProps.value.sitekey) {
     if (isLogLevel('warn')) console.warn('Turnstile site key was not found.');
     isLoading.value = false;
     return;
@@ -185,7 +197,7 @@ watch(
 </script>
 
 <template>
-  <template v-if="sitekey">
+  <template v-if="resolvedSitekey">
     <template v-if="isLoading">
       <slot name="loading">
         <div role="status" aria-busy="true" aria-live="polite">Loading...</div>
