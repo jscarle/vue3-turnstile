@@ -91,7 +91,9 @@ const timeoutCallback = () => {
 const watchedProps = computed((): TurnstileProps => resolvedProps.value);
 
 const options = computed((): RenderParameters => {
-  const { sitekey, ...rest } = watchedProps.value;
+  // exclude logLevel since it is used only for local logging
+  const { sitekey, logLevel: _logLevel, ...rest } = watchedProps.value;
+  void _logLevel;
   return {
     sitekey: sitekey ?? TESTING_SITEKEY,
     ...rest,
