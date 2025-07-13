@@ -51,6 +51,7 @@ createApp(App).use(TurnstilePlugin, {
   sitekey: 'your-site-key',
   logLevel: 'debug',
 })
+```
 
 ## Component props
 
