@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml/badge.svg)](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml)
 
-A Vue 3 TypeScript Component for Cloudflare's Turnstile
+A Vue 3.5 TypeScript Component for Cloudflare's Turnstile
 
 ## Installation
 
