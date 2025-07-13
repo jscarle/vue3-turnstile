@@ -58,9 +58,9 @@ createApp(App).use(TurnstilePlugin, {
 
 ### Customization
 
-Global defaults passed to the plugin apply to every widget but are overridden by
+Global defaults passed to the plugin apply to every widget, but are overridden by
 environment variables. Component props take precedence over both. If an option
-is omitted the component falls back to Vite environment variables, allowing
+is omitted, the component falls back to Vite environment variables, allowing
 configuration per deployment:
 
 ```env
@@ -72,7 +72,7 @@ VITE_TURNSTILE_THEME=light
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `sitekey` | `string` | Always passes test key | Cloudflare Turnstile site key |
+| `sitekey` | `string` | Test key that always passes | Cloudflare Turnstile site key |
 | `action` | `string` | - | Widget analytics action name |
 | `cData` | `string` | - | Custom payload returned on validation |
 | `logLevel` | `'debug' \| 'info' \| 'warn' \| 'error'` | `info` | Browser log level |
