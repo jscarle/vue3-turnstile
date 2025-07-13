@@ -4,7 +4,7 @@ import { useScript } from '@unhead/vue';
 import {
   type LogLevel,
   type TurnstileProps,
-  TESTING_SITEKEY,
+  TEST_SITEKEY_ALWAYS_PASS,
 } from '@/types.ts'
 import { type RenderParameters } from '@/turnstile.ts'
 import { ENV_DEFAULTS } from '@/setup.ts'
@@ -95,7 +95,7 @@ const options = computed((): RenderParameters => {
   const { sitekey, logLevel: _logLevel, ...rest } = watchedProps.value;
   void _logLevel;
   return {
-    sitekey: sitekey ?? TESTING_SITEKEY,
+    sitekey: sitekey ?? TEST_SITEKEY_ALWAYS_PASS,
     ...rest,
     callback,
     'error-callback': errorCallback,

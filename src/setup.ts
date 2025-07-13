@@ -9,7 +9,7 @@ import {
 import {
   type Language,
   type LogLevel,
-  TESTING_SITEKEY,
+  TEST_SITEKEY_ALWAYS_PASS,
 } from '@/types.ts'
 import type { TurnstileProps } from '@/types.ts'
 
@@ -40,7 +40,7 @@ const REFRESH_TIMEOUT = ['never', 'manual', 'auto'] as const;
 const EXECUTION = ['render', 'execute'] as const;
 
 export const ENV_DEFAULTS = {
-  sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY ?? TESTING_SITEKEY,
+  sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY ?? TEST_SITEKEY_ALWAYS_PASS,
   logLevel: parseEnum<LogLevel>(import.meta.env.VITE_TURNSTILE_LOGLEVEL, LOG_LEVELS) ?? 'info',
   theme: parseEnum<Theme>(import.meta.env.VITE_TURNSTILE_THEME, THEMES),
   language: parseEnum<Language>(import.meta.env.VITE_TURNSTILE_LANGUAGE, LANGUAGES),
