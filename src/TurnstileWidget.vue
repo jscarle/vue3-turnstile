@@ -2,44 +2,13 @@
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useScript } from '@unhead/vue';
 import {
-  type Language,
   type LogLevel,
+  type TurnstileProps,
   TESTING_SITEKEY,
 } from '@/types.ts'
-import {   type RenderParameters,
-  type Turnstile
-} from '@/turnstile.ts'
+import { type RenderParameters } from '@/turnstile.ts'
 import { ENV_DEFAULTS } from '@/setup.ts'
 
-type TurnstileSharedOptions =
-  | 'action'
-  | 'cData'
-  | 'theme'
-  | 'tabindex'
-  | 'size'
-  | 'retry'
-  | 'retry-interval'
-  | 'appearance'
-  | 'refresh-expired'
-  | 'refresh-timeout'
-  | 'execution'
-  | 'feedback-enabled';
-
-type TurnstileProps = Pick<RenderParameters, TurnstileSharedOptions> & {
-  /** Every widget has a sitekey. This sitekey is associated with the corresponding widget configuration and is created upon the widget creation. */
-  sitekey?: string;
-  /** Log level for browser logs. Can be debug, info, warn, or error. */
-  logLevel?: LogLevel;
-  /** Language to display. Must be either: auto (default) to use the language that the visitor has chosen, or an ISO 639-1 two-letter language code (e.g. en) or language and country code (e.g. en-US). See https://developers.cloudflare.com/turnstile/reference/supported-languages/ */
-  language?: Language;
-};
-
-declare global {
-  // noinspection JSUnusedGlobalSymbols
-  interface Window {
-    turnstile: Turnstile;
-  }
-}
 
 
 
