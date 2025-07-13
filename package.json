@@ -65,5 +65,20 @@
     "vite": "^7.0.4",
     "vitest": "^3.2.4",
     "vue-tsc": "^3.0.1"
+  },
+  "description": "A Vue 3.5 TypeScript Component for Cloudflare's Turnstile.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jscarle/vue3-turnstile.git"
+  },
+  "keywords": [
+    "vue",
+    "turnstile",
+    "captcha",
+    "cloudflare"
+  ],
+  "publishConfig": {
+    "access": "public"
   }
 }

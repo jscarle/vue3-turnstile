@@ -1,8 +1,8 @@
 # vue3-turnstile
 
-[![CI](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml/badge.svg)](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml)
+A Vue 3.5 TypeScript component for Cloudflare's Turnstile.
 
-A Vue 3.5 TypeScript component for Cloudflare's Turnstile. It exposes a ready to use `<TurnstileWidget />` component.
+[![CI](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml/badge.svg)](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml)
 
 ## Installation
 
@@ -11,7 +11,6 @@ npm install @jscarle/vue3-turnstile
 ```
 
 ## Usage
-
 
 ### Component usage
 
