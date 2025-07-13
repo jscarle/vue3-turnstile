@@ -1,8 +1,8 @@
 # vue3-turnstile
 
-[![CI](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml/badge.svg)](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml)
+A Vue 3.5 TypeScript component for Cloudflare's Turnstile.
 
-A Vue 3.5 TypeScript Component for Cloudflare's Turnstile
+[![CI](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml/badge.svg)](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml)
 
 ## Installation
 
@@ -12,14 +12,29 @@ npm install @jscarle/vue3-turnstile
 
 ## Usage
 
-```ts
+### Component usage
+
+```vue
 <script setup lang="ts">
 import { TurnstileWidget } from '@jscarle/vue3-turnstile'
+const token = ref<string | null>(null)
 </script>
 
 <template>
   <TurnstileWidget v-model="token" sitekey="your-site-key" />
 </template>
+```
+
+### Registering globally
+
+To make `<TurnstileWidget />` available in all components:
+
+```ts
+import { createApp } from 'vue'
+import App from './App.vue'
+import { TurnstilePlugin } from '@jscarle/vue3-turnstile'
+
+createApp(App).use(TurnstilePlugin).mount('#app')
 ```
 
 Run `npm run build` to generate the library and type definitions. Tests can be executed with `npm test`.
