@@ -5,6 +5,12 @@
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
 
+    "noEmit": false,
+
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist/types",
+
     "paths": {
       "@/*": ["./src/*"]
     }
