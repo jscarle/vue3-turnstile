@@ -43,7 +43,7 @@ createApp(App).use(TurnstilePlugin).mount('#app')
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `sitekey` | `string` | `VITE_TURNSTILE_SITEKEY` or a testing key | Cloudflare Turnstile site key |
+| `sitekey` | `string` | Always passes test key | Cloudflare Turnstile site key |
 | `action` | `string` | - | Widget analytics action name |
 | `cData` | `string` | - | Custom payload returned on validation |
 | `logLevel` | `'debug' \| 'info' \| 'warn' \| 'error'` | `info` | Browser log level |
@@ -95,7 +95,3 @@ VITE_TURNSTILE_SITEKEY=your-site-key
 VITE_TURNSTILE_LOGLEVEL=debug
 VITE_TURNSTILE_THEME=light
 ```
-
-## Build and testing
-
-Run `npm run build` to generate the library and `npm test` to execute the unit tests.
