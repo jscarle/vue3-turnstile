@@ -70,7 +70,20 @@ export type Language =
   | 'th-th'
   | 'tl-ph';
 
-export const TESTING_SITEKEY = '1x00000000000000000000AA';
+/** Test sitekey that always passes (visible). */
+export const TEST_SITEKEY_ALWAYS_PASS = '1x00000000000000000000AA';
+
+/** Test sitekey that always blocks (visible). */
+export const TEST_SITEKEY_ALWAYS_BLOCK = '2x00000000000000000000AB';
+
+/** Test sitekey that always passes (invisible). */
+export const TEST_SITEKEY_ALWAYS_PASS_INVISIBLE = '1x00000000000000000000BB';
+
+/** Test sitekey that always blocks (invisible). */
+export const TEST_SITEKEY_ALWAYS_BLOCK_INVISIBLE = '2x00000000000000000000BB';
+
+/** Test sitekey that forces an interactive challenge (visible). */
+export const TEST_SITEKEY_CHALLENGE = '3x00000000000000000000FF';
 
 import type { RenderParameters } from './turnstile.ts';
 

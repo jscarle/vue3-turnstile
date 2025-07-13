@@ -68,6 +68,18 @@ VITE_TURNSTILE_SITEKEY=your-site-key
 VITE_TURNSTILE_THEME=light
 ```
 
+### Test sitekeys
+
+The library exports constants for Cloudflare's test sitekeys:
+
+| Constant | Value | Description |
+| --- | --- | --- |
+| `TEST_SITEKEY_ALWAYS_PASS` | `1x00000000000000000000AA` | Always passes (visible) |
+| `TEST_SITEKEY_ALWAYS_BLOCK` | `2x00000000000000000000AB` | Always blocks (visible) |
+| `TEST_SITEKEY_ALWAYS_PASS_INVISIBLE` | `1x00000000000000000000BB` | Always passes (invisible) |
+| `TEST_SITEKEY_ALWAYS_BLOCK_INVISIBLE` | `2x00000000000000000000BB` | Always blocks (invisible) |
+| `TEST_SITEKEY_CHALLENGE` | `3x00000000000000000000FF` | Forces an interactive challenge |
+
 ## Component props
 
 | Prop | Type | Default | Description |
