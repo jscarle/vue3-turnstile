@@ -11,6 +11,7 @@ import {
   type LogLevel,
   TESTING_SITEKEY,
 } from '@/types.ts'
+import type { TurnstileProps } from '@/types.ts'
 
 function parseEnum<T extends string>(val: unknown, valid: readonly T[]): T | undefined {
   return valid.includes(val as T) ? (val as T) : undefined;
@@ -52,4 +53,4 @@ export const ENV_DEFAULTS = {
   appearance: parseEnum<AppearanceMode>(import.meta.env.VITE_TURNSTILE_APPEARANCE, APPEARANCES),
   'feedback-enabled': parseBoolean(import.meta.env.VITE_TURNSTILE_FEEDBACK_ENABLED),
   execution: parseEnum<ExecutionMode>(import.meta.env.VITE_TURNSTILE_EXECUTION, EXECUTION),
-}
+} satisfies Partial<TurnstileProps>
