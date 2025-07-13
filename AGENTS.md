@@ -10,3 +10,7 @@ The following files must never be modified by the agent:
 - `src/types.ts`
 
 These files define the core component and its public types. Do not alter them under any circumstances.
+
+## README.md
+
+Don't mention things like "Run `npm run build` to generate the library and `npm test` to execute the unit tests." in the README.md file as this package won't be built by most developers, it will be consumed as a Vue component.
