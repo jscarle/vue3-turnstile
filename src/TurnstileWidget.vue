@@ -162,15 +162,21 @@ async function render() {
   }
 }
 
-let exposeDefinition;
-if (typeof window === 'undefined') {
-  function noOp() {}
-
-  exposeDefinition = { reset: noOp, render: noOp, execute: noOp, remove: noOp };
-} else {
-  exposeDefinition = { reset, render, execute, remove };
+interface ExposedMethods {
+  reset(): void
+  render(): void | Promise<void>
+  execute(): void
+  remove(): void
 }
-defineExpose(exposeDefinition);
+
+let exposeDefinition: ExposedMethods
+if (typeof window === 'undefined') {
+  const noOp = () => {}
+  exposeDefinition = { reset: noOp, render: noOp, execute: noOp, remove: noOp }
+} else {
+  exposeDefinition = { reset, render, execute, remove }
+}
+defineExpose(exposeDefinition)
 
 onMounted(async () => {
   if (typeof window === 'undefined' || !resolvedProps.value.sitekey) {
