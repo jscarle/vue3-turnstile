@@ -133,6 +133,30 @@ The component emits the following events:
 - `timeout` – emitted when the interactive challenge was not solved in time.
 - `failed(error: unknown)` – emitted if loading the widget fails entirely.
 
+Use these events to react to the widget state and handle failures gracefully.
+
+```vue
+<script setup lang="ts">
+function onSolved(token: string) {
+  // send token to your server
+}
+
+function onError(message: string) {
+  console.error(message)
+}
+</script>
+
+<template>
+  <TurnstileWidget
+    @success="onSolved"
+    @error="onError"
+    @expired="() => console.log('expired')"
+    @timeout="() => console.log('timeout')"
+    @failed="err => console.error('load failed', err)"
+  />
+</template>
+```
+
 ## Configuration via Environment Variables
 
 When a prop is omitted, its value can be supplied through Vite environment variables. The component reads the following variables:
