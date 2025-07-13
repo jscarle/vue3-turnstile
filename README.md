@@ -36,3 +36,13 @@ import { TurnstilePlugin } from '@jscarle/vue3-turnstile'
 
 createApp(App).use(TurnstilePlugin).mount('#app')
 ```
+
+The plugin accepts global default options which are applied to every
+`<TurnstileWidget />` instance:
+
+```ts
+createApp(App).use(TurnstilePlugin, {
+  sitekey: 'your-site-key',
+  logLevel: 'debug',
+})
+```
