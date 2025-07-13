@@ -8,12 +8,12 @@ import type {
   RefreshTimeoutMode,
   Theme,
   WidgetSize,
-} from '@/types/type.ts';
-import type { Language } from '@/types/type.ts';
+} from '@/turnstile.ts';
+import type { Language, LogLevel } from '@/types.ts'
 
 interface ImportMetaEnv {
   readonly VITE_TURNSTILE_SITEKEY?: string
-  readonly VITE_TURNSTILE_LOGLEVEL?: 'debug' | 'info' | 'warn' | 'error'
+  readonly VITE_TURNSTILE_LOGLEVEL?: LogLevel
   readonly VITE_TURNSTILE_THEME?: Theme
   readonly VITE_TURNSTILE_LANGUAGE?: Language
   readonly VITE_TURNSTILE_TABINDEX?: number
