@@ -15,6 +15,7 @@
       "import": "./dist/vue3-turnstile.es.js"
     }
   },
+  "sideEffects": false,
   "type": "module",
   "scripts": {
     "dev": "vite",
