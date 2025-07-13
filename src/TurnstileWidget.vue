@@ -1,87 +1,14 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useScript } from '@unhead/vue';
-import type {
-  AppearanceMode,
-  ExecutionMode, FailureRetryMode, RefreshExpiredMode,
-  RenderParameters,
-  Theme,
-  Turnstile,
-  WidgetSize
-} from '@/types/turnstile'
-
-const TESTING_SITEKEY = '1x00000000000000000000AA';
-
-/** Language codes supported by Cloudflare Turnstile. */
-export type Language =
-  | 'auto'
-  | 'ar'
-  | 'bn'
-  | 'bg'
-  | 'ca'
-  | 'zh-CN'
-  | 'zh-TW'
-  | 'hr'
-  | 'cs'
-  | 'da'
-  | 'nl'
-  | 'en'
-  | 'et'
-  | 'tl'
-  | 'fi'
-  | 'fr'
-  | 'de'
-  | 'el'
-  | 'he'
-  | 'hi'
-  | 'hu'
-  | 'id'
-  | 'it'
-  | 'ja'
-  | 'ko'
-  | 'lv'
-  | 'lt'
-  | 'ms'
-  | 'nb'
-  | 'fa'
-  | 'pl'
-  | 'pt'
-  | 'pt-BR'
-  | 'ro'
-  | 'ru'
-  | 'sr'
-  | 'sk'
-  | 'sl'
-  | 'es'
-  | 'sv'
-  | 'th'
-  | 'tr'
-  | 'uk'
-  | 'vi'
-  | 'ar-eg'
-  | 'es-es'
-  | 'fr-fr'
-  | 'de-de'
-  | 'ja-jp'
-  | 'ru-ru'
-  | 'tr-tr'
-  | 'pt-br'
-  | 'nl-nl'
-  | 'it-it'
-  | 'pl-pl'
-  | 'fa-ir'
-  | 'hr-hr'
-  | 'hu-hu'
-  | 'lt-lt'
-  | 'nb-no'
-  | 'ro-ro'
-  | 'sk-sk'
-  | 'sl-si'
-  | 'sr-ba'
-  | 'uk-ua'
-  | 'ms-my'
-  | 'th-th'
-  | 'tl-ph';
+import {
+  type Language,
+  type LogLevel,
+  type RenderParameters,
+  TESTING_SITEKEY,
+  type Turnstile
+} from '@/types/turnstile.d'
+import { ENV_DEFAULTS } from '@/setup.ts'
 
 type TurnstileSharedOptions =
   | 'action'
@@ -113,48 +40,9 @@ declare global {
   }
 }
 
-export type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
-function parseEnum<T extends string>(val: unknown, valid: readonly T[]): T | undefined {
-  return valid.includes(val as T) ? (val as T) : undefined;
-}
-function parseNumber(val: unknown): number | undefined {
-  const n = Number(val);
-  return !isNaN(n) ? n : undefined;
-}
-function parseBoolean(val: unknown): boolean | undefined {
-  if (val === undefined) return undefined;
-  if (val === 'true' || val === '1') return true;
-  if (val === 'false' || val === '0') return false;
-  return undefined;
-}
 
-const LOG_LEVELS = ['debug', 'info', 'warn', 'error'] as const;
-const THEMES = ['auto', 'light', 'dark'] as const;
-const LANGUAGES = [
-  'auto','ar','bn','bg','ca','zh-CN','zh-TW','hr','cs','da','nl','en','et','tl','fi','fr','de','el','he','hi','hu','id','it','ja','ko','lv','lt','ms','nb','fa','pl','pt','pt-BR','ro','ru','sr','sk','sl','es','sv','th','tr','uk','vi','ar-eg','es-es','fr-fr','de-de','ja-jp','ru-ru','tr-tr','pt-br','nl-nl','it-it','pl-pl','fa-ir','hr-hr','hu-hu','lt-lt','nb-no','ro-ro','sk-sk','sl-si','sr-ba','uk-ua','ms-my','th-th','tl-ph'
-] as const;
-const SIZES = ['normal', 'compact', 'flexible'] as const;
-const FAILURE_MODES = ['never', 'auto'] as const;
-const APPEARANCES = ['always', 'execute', 'interaction-only'] as const;
-const REFRESH_EXPIRED = ['never', 'manual', 'auto'] as const;
-const EXECUTION = ['render', 'execute'] as const;
-
-const props = withDefaults(defineProps<TurnstileProps>(), {
-  sitekey: import.meta.env.VITE_TURNSTILE_SITEKEY ?? TESTING_SITEKEY,
-  logLevel: parseEnum<LogLevel>(import.meta.env.VITE_TURNSTILE_LOGLEVEL, LOG_LEVELS) ?? 'info',
-  theme: parseEnum<Theme>(import.meta.env.VITE_TURNSTILE_THEME, THEMES),
-  language: parseEnum<Language>(import.meta.env.VITE_TURNSTILE_LANGUAGE, LANGUAGES),
-  tabindex: parseNumber(import.meta.env.VITE_TURNSTILE_TABINDEX),
-  size: parseEnum<WidgetSize>(import.meta.env.VITE_TURNSTILE_SIZE, SIZES),
-  retry: parseEnum<FailureRetryMode>(import.meta.env.VITE_TURNSTILE_RETRY, FAILURE_MODES),
-  retryInterval: parseNumber(import.meta.env.VITE_TURNSTILE_RETRY_INTERVAL),
-  refreshExpired: parseEnum<RefreshExpiredMode>(import.meta.env.VITE_TURNSTILE_REFRESH_EXPIRED, REFRESH_EXPIRED),
-  refreshTimeout: parseNumber(import.meta.env.VITE_TURNSTILE_REFRESH_TIMEOUT),
-  appearance: parseEnum<AppearanceMode>(import.meta.env.VITE_TURNSTILE_APPEARANCE, APPEARANCES),
-  feedbackEnabled: parseBoolean(import.meta.env.VITE_TURNSTILE_FEEDBACK_ENABLED),
-  execution: parseEnum<ExecutionMode>(import.meta.env.VITE_TURNSTILE_EXECUTION, EXECUTION),
-});
+const props = withDefaults(defineProps<TurnstileProps>(), ENV_DEFAULTS);
 
 const model = defineModel<string | null>({ required: true });
 
