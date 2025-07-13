@@ -1,14 +1,16 @@
 import {
   type AppearanceMode, type ExecutionMode,
   type FailureRetryMode,
-  type Language,
-  type LogLevel,
   type RefreshExpiredMode,
   type RefreshTimeoutMode,
-  TESTING_SITEKEY,
   type Theme,
   type WidgetSize
-} from '@/types/turnstile.d'
+} from '@/turnstile.ts'
+import {
+  type Language,
+  type LogLevel,
+  TESTING_SITEKEY,
+} from '@/types.ts'
 
 function parseEnum<T extends string>(val: unknown, valid: readonly T[]): T | undefined {
   return valid.includes(val as T) ? (val as T) : undefined;

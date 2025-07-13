@@ -8,8 +8,8 @@ import type {
   RefreshTimeoutMode,
   Theme,
   WidgetSize,
-} from '@/types/turnstile';
-import type { Language } from '@/types/turnstile';
+} from '@/types/type.ts';
+import type { Language } from '@/types/type.ts';
 
 interface ImportMetaEnv {
   readonly VITE_TURNSTILE_SITEKEY?: string

@@ -1,7 +1,7 @@
 import { mount, flushPromises } from '@vue/test-utils'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { TurnstileWidget } from '../index'
-import type { Turnstile } from '../types/turnstile'
+import type { Turnstile } from '../types/type.ts'
 
 vi.mock('@unhead/vue', () => ({
   useScript: () => ({

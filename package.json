@@ -34,10 +34,8 @@
     "captcha"
   ],
   "scripts": {
-    "dev": "vite",
     "build": "npm run clean && npm run type && vite build",
     "clean": "rimraf dist",
-    "preview": "vite preview",
     "type": "vue-tsc -p tsconfig.app.json",
     "lint": "eslint . --fix",
     "test": "vitest run",

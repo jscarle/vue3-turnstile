@@ -7,6 +7,6 @@ This repository packages a Vue 3.5 component for distribution on NPM. It is inte
 The following files must never be modified by the agent:
 
 - `src/TurnstileWidget.vue`
-- `src/types/turnstile.d.ts`
+- `src/types.ts`
 
 These files define the core component and its public types. Do not alter them under any circumstances.

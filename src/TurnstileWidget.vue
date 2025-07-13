@@ -4,10 +4,11 @@ import { useScript } from '@unhead/vue';
 import {
   type Language,
   type LogLevel,
-  type RenderParameters,
   TESTING_SITEKEY,
+} from '@/types.ts'
+import {   type RenderParameters,
   type Turnstile
-} from '@/types/turnstile.d'
+} from '@/turnstile.ts'
 import { ENV_DEFAULTS } from '@/setup.ts'
 
 type TurnstileSharedOptions =
