@@ -6,6 +6,10 @@ Requires **Vue 3.5** or later and **@unhead/vue 2.0.12** or later.
 
 [![CI](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml/badge.svg)](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml)
 
+## Overview
+
+`vue3-turnstile` wraps the [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) widget in a strongly typed Vue component. It exposes the Turnstile API methods as component methods and can be configured via props, plugin defaults, or environment variables.
+
 ## Installation
 
 ```bash
@@ -104,3 +108,27 @@ VITE_TURNSTILE_SITEKEY=your-site-key
 VITE_TURNSTILE_LOGLEVEL=debug
 VITE_TURNSTILE_THEME=light
 ```
+
+## Token Verification
+
+Validate the response token on your server by sending it to Cloudflare's [`siteverify` endpoint](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/):
+
+```ts
+const params = new URLSearchParams()
+params.append('secret', 'your-secret-key')
+params.append('response', token)
+
+const result = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+  method: 'POST',
+  body: params,
+})
+  .then(r => r.json())
+
+if (!result.success) {
+  // token is invalid
+}
+```
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
