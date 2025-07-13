@@ -2,6 +2,7 @@
 
 import type {
   AppearanceMode,
+  ExecutionMode,
   FailureRetryMode,
   RefreshExpiredMode,
   RefreshTimeoutMode,
@@ -23,6 +24,7 @@ interface ImportMetaEnv {
   readonly VITE_TURNSTILE_REFRESH_TIMEOUT?: RefreshTimeoutMode
   readonly VITE_TURNSTILE_APPEARANCE?: AppearanceMode
   readonly VITE_TURNSTILE_FEEDBACK_ENABLED?: boolean
+  readonly VITE_TURNSTILE_EXECUTION?: ExecutionMode
 }
 
 interface ImportMeta {
