@@ -1,7 +1,11 @@
 import {
   type AppearanceMode, type ExecutionMode,
-  type FailureRetryMode, type Language, type LogLevel,
-  type RefreshExpiredMode, TESTING_SITEKEY,
+  type FailureRetryMode,
+  type Language,
+  type LogLevel,
+  type RefreshExpiredMode,
+  type RefreshTimeoutMode,
+  TESTING_SITEKEY,
   type Theme,
   type WidgetSize
 } from '@/types/turnstile.d'
@@ -29,6 +33,7 @@ const SIZES = ['normal', 'compact', 'flexible'] as const;
 const FAILURE_MODES = ['never', 'auto'] as const;
 const APPEARANCES = ['always', 'execute', 'interaction-only'] as const;
 const REFRESH_EXPIRED = ['never', 'manual', 'auto'] as const;
+const REFRESH_TIMEOUT = ['never', 'manual', 'auto'] as const;
 const EXECUTION = ['render', 'execute'] as const;
 
 export const ENV_DEFAULTS = {
@@ -39,10 +44,10 @@ export const ENV_DEFAULTS = {
   tabindex: parseNumber(import.meta.env.VITE_TURNSTILE_TABINDEX),
   size: parseEnum<WidgetSize>(import.meta.env.VITE_TURNSTILE_SIZE, SIZES),
   retry: parseEnum<FailureRetryMode>(import.meta.env.VITE_TURNSTILE_RETRY, FAILURE_MODES),
-  retryInterval: parseNumber(import.meta.env.VITE_TURNSTILE_RETRY_INTERVAL),
-  refreshExpired: parseEnum<RefreshExpiredMode>(import.meta.env.VITE_TURNSTILE_REFRESH_EXPIRED, REFRESH_EXPIRED),
-  refreshTimeout: parseNumber(import.meta.env.VITE_TURNSTILE_REFRESH_TIMEOUT),
+  'retry-interval': parseNumber(import.meta.env.VITE_TURNSTILE_RETRY_INTERVAL),
+  'refresh-expired': parseEnum<RefreshExpiredMode>(import.meta.env.VITE_TURNSTILE_REFRESH_EXPIRED, REFRESH_EXPIRED),
+  'refresh-timeout': parseEnum<RefreshTimeoutMode>(import.meta.env.VITE_TURNSTILE_REFRESH_TIMEOUT, REFRESH_TIMEOUT),
   appearance: parseEnum<AppearanceMode>(import.meta.env.VITE_TURNSTILE_APPEARANCE, APPEARANCES),
-  feedbackEnabled: parseBoolean(import.meta.env.VITE_TURNSTILE_FEEDBACK_ENABLED),
+  'feedback-enabled': parseBoolean(import.meta.env.VITE_TURNSTILE_FEEDBACK_ENABLED),
   execution: parseEnum<ExecutionMode>(import.meta.env.VITE_TURNSTILE_EXECUTION, EXECUTION),
 }
