@@ -241,3 +241,12 @@ export interface Turnstile {
    */
   isExpired(container?: string | HTMLElement): boolean;
 }
+
+declare global {
+  // noinspection JSUnusedGlobalSymbols
+  interface Window {
+    turnstile: Turnstile;
+  }
+}
+
+export {};
