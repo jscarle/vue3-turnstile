@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useScript } from '@unhead/vue';
+import type { RenderParameters, Turnstile } from '@/types/turnstile';
 
 const TESTING_SITEKEY = '1x00000000000000000000AA';
 
@@ -77,7 +78,7 @@ export type TurnstileLanguage =
 
 type TurnstileSharedOptions = 'action' | 'cData' | 'theme' | 'tabindex' | 'size' | 'retry' | 'retry-interval' | 'appearance' | 'refresh-expired' | 'refresh-timeout' | 'execution';
 
-type TurnstileProps = Pick<Turnstile.RenderParameters, TurnstileSharedOptions> & {
+type TurnstileProps = Pick<RenderParameters, TurnstileSharedOptions> & {
   /** Every widget has a sitekey. This sitekey is associated with the corresponding widget configuration and is created upon the widget creation. */
   sitekey?: string;
   /** Log level for browser logs. Can be debug, info, warn, or error. */
@@ -89,7 +90,7 @@ type TurnstileProps = Pick<Turnstile.RenderParameters, TurnstileSharedOptions> &
 declare global {
   // noinspection JSUnusedGlobalSymbols
   interface Window {
-    turnstile: Turnstile.Turnstile;
+    turnstile: Turnstile;
   }
 }
 
@@ -174,7 +175,7 @@ const timeoutCallback = () => {
 
 const watchedProps = computed((): TurnstileProps => props);
 
-const options = computed((): Turnstile.RenderParameters => {
+const options = computed((): RenderParameters => {
   const { sitekey, ...rest } = watchedProps.value;
   return {
     sitekey: sitekey ?? TESTING_SITEKEY,
