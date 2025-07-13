@@ -172,8 +172,9 @@ const result = await fetch('https://challenges.cloudflare.com/turnstile/v0/sitev
 if (!result.success) {
   // token is invalid
 }
-Tokens must be validated within 300 seconds and cannot be reused.
 ```
+
+Tokens must be validated within 300 seconds and cannot be reused.
 
 ## Contributing
 
