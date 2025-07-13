@@ -1,6 +1,7 @@
 import { mount, flushPromises } from '@vue/test-utils'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { TurnstileWidget } from '../index'
+import type { Turnstile } from '../types/turnstile'
 
 vi.mock('@unhead/vue', () => ({
   useScript: () => ({
@@ -10,7 +11,7 @@ vi.mock('@unhead/vue', () => ({
 }))
 
 beforeEach(() => {
-  ;(window as any).turnstile = {
+  ;(window as unknown as { turnstile: Turnstile }).turnstile = {
     render: vi.fn().mockReturnValue('widget-id'),
     reset: vi.fn(),
     remove: vi.fn(),
@@ -20,12 +21,16 @@ beforeEach(() => {
 
 describe('TurnstileWidget', () => {
   it('mounts and exposes methods', async () => {
-    const wrapper = mount(TurnstileWidget, { props: { sitekey: 'test-key', modelValue: null } })
+    const wrapper = mount(TurnstileWidget, {
+      props: { sitekey: 'test-key', modelValue: null },
+    })
     await flushPromises()
-    expect((window as any).turnstile.render).toHaveBeenCalled()
-    expect(typeof (wrapper.vm as any).render).toBe('function')
-    expect(typeof (wrapper.vm as any).reset).toBe('function')
-    expect(typeof (wrapper.vm as any).execute).toBe('function')
-    expect(typeof (wrapper.vm as any).remove).toBe('function')
+    const win = window as unknown as { turnstile: Turnstile }
+    expect(win.turnstile.render).toHaveBeenCalled()
+    const vm = wrapper.vm as InstanceType<typeof TurnstileWidget>
+    expect(typeof vm.render).toBe('function')
+    expect(typeof vm.reset).toBe('function')
+    expect(typeof vm.execute).toBe('function')
+    expect(typeof vm.remove).toBe('function')
   })
 })
