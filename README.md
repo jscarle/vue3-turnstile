@@ -36,5 +36,3 @@ import { TurnstilePlugin } from '@jscarle/vue3-turnstile'
 
 createApp(App).use(TurnstilePlugin).mount('#app')
 ```
-
-Run `npm run build` to generate the library and type definitions. Tests can be executed with `npm test`.
