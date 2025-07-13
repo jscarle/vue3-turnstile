@@ -56,11 +56,13 @@ export interface RenderParameters {
 
   /**
    * Optional. A customer value that can be used to differentiate widgets under the same sitekey in analytics and which is returned upon validation.
+   * This value may contain up to 32 alphanumeric characters including `_` and `-`.
    */
   action?: string;
 
   /**
    * Optional. A customer payload that can be used to attach customer data to the challenge throughout its issuance and which is returned upon validation.
+   * This value may contain up to 255 alphanumeric characters including `_` and `-`.
    */
   cData?: string;
 
@@ -71,7 +73,8 @@ export interface RenderParameters {
   callback?: (token: string) => void;
 
   /**
-   * Optional. A JavaScript callback that is invoked when a challenge expires.
+   * Optional. A JavaScript callback invoked when the token expires.
+   * The widget will not reset when this callback is triggered.
    */
   'expired-callback'?: (token: string) => void;
 
@@ -82,29 +85,30 @@ export interface RenderParameters {
   'error-callback'?: (error: string) => void;
 
   /**
-   * Optional. A JavaScript callback that is invoked when the Turnstile widget times out.
+   * Optional. A JavaScript callback invoked when the challenge presents an interactive challenge but was not solved within a given time.
+   * The callback should reset the widget so the visitor can try again.
    */
   'timeout-callback'?: () => void;
 
   /**
-   * Optional. A JavaScript callback that is invoked before the user is prompted for interactivity.
+   * Optional. A JavaScript callback invoked before the challenge enters interactive mode.
    */
   'before-interactive-callback'?: () => void;
 
   /**
-   * Optional. A JavaScript callback that is invoked when the interactive challenge has been solved.
+   * Optional. A JavaScript callback invoked when challenge has left interactive mode.
    */
   'after-interactive-callback'?: () => void;
 
   /**
-   * Optional. A JavaScript callback that is invoked when the browser is not supported by Turnstile.
+   * Optional. A JavaScript callback invoked when a given client or browser is not supported by Turnstile.
    */
   'unsupported-callback'?: () => void;
 
   /**
    * Optional. The widget theme.
-   * Accepted values: "auto", "light", "dark"
-   * @default "auto"
+   * Can be `light`, `dark`, or `auto`.
+   * The default is `auto`, which respects the user's preference.
    */
   theme?: Theme;
 
@@ -122,58 +126,65 @@ export interface RenderParameters {
   size?: WidgetSize;
 
   /**
-   * Optional. How to retry on widget failure.
-   * Accepted values: "auto", "never"
-   * @default "auto"
+   * Optional. Controls whether the widget should automatically retry obtaining a token if it fails.
+   * The default `auto` will retry automatically; set to `never` to disable.
    */
   retry?: FailureRetryMode;
 
   /**
-   * Optional. Duration in milliseconds before the widget automatically retries.
-   * @default 2000
+   * Optional. Time between retry attempts when `retry` is `auto`, in milliseconds.
+   * Must be a positive integer less than 900000.
+   * @default 8000
    */
   'retry-interval'?: number;
 
   /**
-   * Optional. The language picked by the customer (may not be supported).
-   * This must be a valid ISO 639-1 country code, or "auto".
-   * @default "auto"
+   * Optional. Language to display.
+   * Must be `auto` (default) to use the visitor's language, or an ISO 639-1 code such as `en` or `en-US`.
    */
   language?: string;
 
   /**
-   * Optional. The appearance mode of the widget.
-   * @default "always"
+   * Optional. Controls when the widget is visible.
+   * Can be `always` (default), `execute`, or `interaction-only`.
    */
   appearance?: AppearanceMode;
 
   /**
-   * Optional. Whether to add or not a hidden response input element with the turnstile token.
+   * Optional. Controls creation of a hidden input element containing the response token.
    * @default true
    */
   'response-field'?: boolean;
 
   /**
-   * Optional. The name of the hidden input element added to the container where Turnstile is injected.
+   * Optional. Name of the hidden response input element.
    * @default "cf-turnstile-response"
    */
   'response-field-name'?: string;
 
   /**
-   * Optional.
+   * Optional. Automatically refreshes the token when it expires.
+   * Can be `auto`, `manual`, or `never`.
    * @default "auto"
    */
   'refresh-expired'?: RefreshExpiredMode;
 
   /**
-   * Optional.
+   * Optional. Controls widget refresh behavior on interactive challenge timeout.
+   * Can be `auto`, `manual`, or `never`.
    * @default "auto"
    */
   'refresh-timeout'?: RefreshTimeoutMode;
 
   /**
-   * Optional.
-   * @default "render"
+   * Optional. Allows Cloudflare to gather visitor feedback upon widget failure.
+   * @default true
+   */
+  'feedback-enabled'?: boolean;
+
+  /**
+   * Optional. Controls when to obtain the token of the widget.
+   * Can be `render` (default) or `execute`.
    */
   execution?: ExecutionMode;
 }
