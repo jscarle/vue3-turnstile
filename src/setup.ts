@@ -14,7 +14,7 @@ import {
 import type { TurnstileProps } from '@/types.ts'
 
 function parseEnum<T extends string>(val: unknown, valid: readonly T[]): T | undefined {
-  return valid.includes(val as T) ? (val as T) : undefined;
+  return typeof val === 'string' && valid.includes(val as T) ? (val as T) : undefined;
 }
 function parseNumber(val: unknown): number | undefined {
   const n = Number(val);
