@@ -8,7 +8,7 @@ import type {
   Theme,
   WidgetSize,
 } from '@/types/turnstile';
-import type { Language } from '@/TurnstileWidget.vue';
+import type { Language } from '@/types/turnstile';
 
 interface ImportMetaEnv {
   readonly VITE_TURNSTILE_SITEKEY?: string
