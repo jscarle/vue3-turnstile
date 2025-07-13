@@ -10,9 +10,9 @@
   ],
   "exports": {
     ".": {
+      "types": "./dist/types/index.d.ts",
       "require": "./dist/vue3-turnstile.umd.js",
-      "import": "./dist/vue3-turnstile.es.js",
-      "types": "./dist/types/index.d.ts"
+      "import": "./dist/vue3-turnstile.es.js"
     }
   },
   "type": "module",
@@ -32,18 +32,17 @@
   },
   "devDependencies": {
     "@tsconfig/node22": "^22.0.2",
-    "@types/cloudflare-turnstile": "^0.2.2",
     "@types/node": "^24.0.13",
     "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.7.0",
     "eslint": "^9.31.0",
     "eslint-plugin-vue": "~10.3.0",
+    "jsdom": "^26.1.0",
+    "rimraf": "^6.0.1",
     "typescript": "~5.8.3",
     "vite": "^7.0.4",
-    "vue-tsc": "^3.0.1",
     "vitest": "^3.2.4",
-    "@vue/test-utils": "^2.4.6",
-    "rimraf": "^6.0.1",
-    "jsdom": "^26.1.0"
+    "vue-tsc": "^3.0.1"
   }
 }

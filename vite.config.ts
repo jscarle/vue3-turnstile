@@ -23,6 +23,10 @@ export default defineConfig({
       external: ['vue', '@unhead/vue'],
       output: {
         exports: 'named',
+        globals: {
+          vue: 'Vue',
+          '@unhead/vue': 'UnheadVue',
+        },
       },
     },
   },
