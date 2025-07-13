@@ -16,6 +16,39 @@ Requires **Vue 3.5** or later and **@unhead/vue 2.0.12** or later.
 npm install @jscarle/vue3-turnstile
 ```
 
+## Getting Started
+
+Add the widget to your component and verify the returned token on your server:
+
+```vue
+<script setup lang="ts">
+import { TurnstileWidget } from '@jscarle/vue3-turnstile'
+const token = ref<string | null>(null)
+</script>
+
+<template>
+  <TurnstileWidget v-model="token" sitekey="your-site-key" />
+</template>
+```
+
+```ts
+// server verification example
+const params = new URLSearchParams()
+params.append('secret', 'your-secret-key')
+params.append('response', token)
+
+const result = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+  method: 'POST',
+  body: params,
+}).then(r => r.json())
+
+if (!result.success) {
+  // token is invalid
+}
+```
+
+Tokens must be validated within 300 seconds and cannot be reused.
+
 ## Usage
 
 ### Component usage
@@ -53,6 +86,17 @@ createApp(App).use(TurnstilePlugin, {
 })
 ```
 
+### Customization
+
+Global defaults passed to the plugin apply to every widget. Values can also be
+defined through Vite environment variables, allowing configuration per
+deployment:
+
+```env
+VITE_TURNSTILE_SITEKEY=your-site-key
+VITE_TURNSTILE_THEME=light
+```
+
 ## Component props
 
 | Prop | Type | Default | Description |
@@ -77,12 +121,17 @@ createApp(App).use(TurnstilePlugin, {
 
 The component emits the following events:
 
-- `success(response: string)` – challenge solved successfully.
-- `error(error: string)` – a runtime error occurred.
-- `expired` – token expired.
-- `unsupported` – browser is unsupported.
-- `timeout` – interactive challenge timed out.
-- `failed(error: unknown)` – failed to load the widget.
+- `success(response: string)` – emitted when the visitor solves the challenge.
+  The returned token is also available via `v-model` and should be sent to
+  Cloudflare for verification.
+- `error(error: string)` – emitted when a runtime error occurs while obtaining a
+  token.
+- `expired` – emitted when the token is no longer valid but the widget has not
+  been reset.
+- `unsupported` – emitted if the visitor's browser is unsupported by
+  Cloudflare Turnstile.
+- `timeout` – emitted when the interactive challenge was not solved in time.
+- `failed(error: unknown)` – emitted if loading the widget fails entirely.
 
 ## Configuration via Environment Variables
 
@@ -129,6 +178,11 @@ if (!result.success) {
   // token is invalid
 }
 ```
+
+## Contributing
+
+Issues and pull requests are welcome. Feel free to open a ticket if you discover
+an issue or have a feature request.
 
 ## License
 
