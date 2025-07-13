@@ -8,7 +8,7 @@ Requires **Vue 3.5** or later and **@unhead/vue 2.0.12** or later.
 
 ## Overview
 
-`vue3-turnstile` wraps the [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) widget in a strongly typed Vue component. It exposes the Turnstile API methods as component methods and can be configured via props, plugin defaults, or environment variables.
+`vue3-turnstile` wraps the [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) widget in a strongly typed Vue component. It exposes the Turnstile API methods as component methods and can be configured via component props, environment variables, or plugin defaults. Configuration values are resolved in that order of priority.
 
 ## Installation
 
@@ -76,8 +76,11 @@ import { TurnstilePlugin } from '@jscarle/vue3-turnstile'
 createApp(App).use(TurnstilePlugin).mount('#app')
 ```
 
-The plugin accepts global default options which are applied to every
-`<TurnstileWidget />` instance:
+`TurnstilePlugin` installs the `TurnstileWidget` component globally and injects
+default options for all widget props. Environment variables override these
+plugin options, and component props take priority over both. Options therefore
+serve as fallbacks when neither props nor Vite environment variables provide a
+value for a `<TurnstileWidget />` instance:
 
 ```ts
 createApp(App).use(TurnstilePlugin, {
@@ -88,9 +91,10 @@ createApp(App).use(TurnstilePlugin, {
 
 ### Customization
 
-Global defaults passed to the plugin apply to every widget. Values can also be
-defined through Vite environment variables, allowing configuration per
-deployment:
+Global defaults passed to the plugin apply to every widget but are overridden by
+environment variables. Component props take precedence over both. If an option
+is omitted the component falls back to Vite environment variables, allowing
+configuration per deployment:
 
 ```env
 VITE_TURNSTILE_SITEKEY=your-site-key
