@@ -7,10 +7,10 @@ import {
   TEST_SITEKEY_ALWAYS_PASS,
 } from '@/types.ts'
 import { type RenderParameters } from '@/turnstile.ts'
-import { ENV_DEFAULTS } from '@/setup.ts'
+import { DEFAULT_PROPS } from '@/setup.ts'
 import { TurnstileOptionsKey, type TurnstilePluginOptions } from '@/plugin'
 
-const props = withDefaults(defineProps<TurnstileProps>(), ENV_DEFAULTS);
+const props = withDefaults(defineProps<TurnstileProps>(), DEFAULT_PROPS);
 const pluginOptions = inject(
   TurnstileOptionsKey,
   {} as TurnstilePluginOptions,
