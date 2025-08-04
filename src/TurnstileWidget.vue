@@ -10,9 +10,6 @@ import { type RenderParameters } from '@/turnstile.ts'
 import { ENV_DEFAULTS } from '@/setup.ts'
 import { TurnstileOptionsKey, type TurnstilePluginOptions } from '@/plugin'
 
-
-
-
 const props = withDefaults(defineProps<TurnstileProps>(), ENV_DEFAULTS);
 const pluginOptions = inject(
   TurnstileOptionsKey,
@@ -124,10 +121,10 @@ function remove() {
   try {
     if (typeof window !== 'undefined' && window.turnstile && window.turnstile.remove) {
       if (widgetId.value) {
+        if (isLogLevel('debug')) console.debug('Turnstile is removing container.');
         window.turnstile.remove(widgetId.value);
         widgetId.value = null;
-      } else if (widgetRef.value) {
-        window.turnstile.remove(widgetRef.value);
+        if (isLogLevel('debug')) console.debug('Turnstile removed container.');
       }
     }
   } catch (e) {
@@ -139,7 +136,6 @@ function remove() {
 async function render() {
   try {
     error.value = null;
-    remove();
     if (mustInitialize.value && !isInitialized.value) {
       isInitialized.value = true;
       await turnstile.load();
@@ -197,9 +193,12 @@ onUnmounted(() => {
 
 watch(
   () => watchedProps.value,
-  async () => {
+  async (newVal, oldVal, onCleanup) => {
+    let cancelled = false;
+    onCleanup(() => (cancelled = true));
     remove();
     await render();
+    if (cancelled) return;
   }
 );
 </script>
