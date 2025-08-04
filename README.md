@@ -8,7 +8,7 @@ Requires **Vue 3.5** or later and **@unhead/vue 2.0.12** or later.
 
 ## Overview
 
-`vue3-turnstile` wraps the [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) widget in a strongly typed Vue component. It exposes the Turnstile API methods as component methods and can be configured via component props, environment variables, or plugin defaults. Configuration values are resolved in that order of priority.
+`vue3-turnstile` wraps the [Cloudflare Turnstile](https://developers.cloudflare.com/turnstile/) widget in a strongly typed Vue component. It exposes the Turnstile API methods as component methods and can be configured via component props or plugin defaults. Component props take precedence over plugin defaults.
 
 ## Installation
 
@@ -44,10 +44,8 @@ createApp(App).use(TurnstilePlugin).mount('#app')
 ```
 
 `TurnstilePlugin` installs the `TurnstileWidget` component globally and injects
-default options for all widget props. Environment variables override these
-plugin options, and component props take priority over both. Options therefore
-serve as fallbacks when neither props nor Vite environment variables provide a
-value for a `<TurnstileWidget />` instance:
+default options for all widget props. Component props take priority over these
+options, which therefore act as fallbacks for each `<TurnstileWidget />` instance:
 
 ```ts
 createApp(App).use(TurnstilePlugin, {
@@ -58,15 +56,8 @@ createApp(App).use(TurnstilePlugin, {
 
 ### Customization
 
-Global defaults passed to the plugin apply to every widget, but are overridden by
-environment variables. Component props take precedence over both. If an option
-is omitted, the component falls back to Vite environment variables, allowing
-configuration per deployment:
-
-```env
-VITE_TURNSTILE_SITEKEY=your-site-key
-VITE_TURNSTILE_THEME=light
-```
+Global defaults passed to the plugin apply to every widget. Component props take
+precedence over these defaults, enabling per-instance configuration.
 
 ### Test sitekeys
 
@@ -140,31 +131,6 @@ function onError(message: string) {
 </template>
 ```
 
-### Environment variables
-When a prop is omitted, its value can be supplied through Vite environment variables.
-The component reads the following variables:
-
-- `VITE_TURNSTILE_SITEKEY`
-- `VITE_TURNSTILE_LOGLEVEL`
-- `VITE_TURNSTILE_THEME`
-- `VITE_TURNSTILE_LANGUAGE`
-- `VITE_TURNSTILE_TABINDEX`
-- `VITE_TURNSTILE_SIZE`
-- `VITE_TURNSTILE_RETRY`
-- `VITE_TURNSTILE_RETRY_INTERVAL`
-- `VITE_TURNSTILE_REFRESH_EXPIRED`
-- `VITE_TURNSTILE_REFRESH_TIMEOUT`
-- `VITE_TURNSTILE_APPEARANCE`
-- `VITE_TURNSTILE_FEEDBACK_ENABLED`
-- `VITE_TURNSTILE_EXECUTION`
-
-Example `.env`:
-
-```env
-VITE_TURNSTILE_SITEKEY=your-site-key
-VITE_TURNSTILE_LOGLEVEL=debug
-VITE_TURNSTILE_THEME=light
-```
 
 ## Token Verification
 
