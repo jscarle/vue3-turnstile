@@ -1,8 +1,8 @@
 # vue3-turnstile
 
-A Vue 3.5 TypeScript component for Cloudflare's Turnstile.
+A Vue 3.5.17 TypeScript component for Cloudflare's Turnstile.
 
-Requires **Vue 3.5** or later and **@unhead/vue 2.0.12** or later.
+Requires **Vue 3.5.17** or later and **@unhead/vue 2.0.12** or later.
 
 [![CI](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml/badge.svg)](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml)
 
