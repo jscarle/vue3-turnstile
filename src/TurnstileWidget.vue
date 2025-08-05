@@ -16,27 +16,23 @@ const pluginOptions = inject(
   {} as TurnstilePluginOptions,
 );
 const resolvedProps = computed((): TurnstileProps => {
-  const { modelValue: _modelValue, ...propsWithoutModel } = props as TurnstileProps & {
-    modelValue?: unknown
-  };
-  void _modelValue;
   return {
     ...DEFAULT_PROPS,
     ...(pluginOptions as TurnstilePluginOptions),
     ...Object.fromEntries(
-      Object.entries(propsWithoutModel).filter(([, v]) => v !== undefined),
+      Object.entries(props).filter(([, v]) => v !== undefined),
     ),
   } as TurnstileProps;
 });
 
 const watchedWidgetOptions = computed(() => ({
-  action: resolvedProps.value.action,
-  cData: resolvedProps.value.cData,
-  theme: resolvedProps.value.theme,
-  tabindex: resolvedProps.value.tabindex,
-  size: resolvedProps.value.size,
-  'feedback-enabled': resolvedProps.value['feedback-enabled'],
-  language: resolvedProps.value.language,
+  action: props.action,
+  cData: props.cData,
+  theme: props.theme,
+  tabindex: props.tabindex,
+  size: props.size,
+  'feedback-enabled': props['feedback-enabled'],
+  language: props.language,
 }));
 
 const model = defineModel<string | null>({ required: true });
@@ -74,7 +70,7 @@ if (typeof window !== 'undefined' && window.turnstile === undefined) {
 /** Check if a message should be logged for the current log level. */
 function isLogLevel(level: LogLevel): boolean {
   return (
-    logLevelOrder[level] >= logLevelOrder[resolvedProps.value.logLevel!]
+    logLevelOrder[level] >= logLevelOrder[resolvedProps.value.logLevel ?? 'warn']
   );
 }
 
@@ -103,11 +99,8 @@ const timeoutCallback = () => {
   model.value = null;
 };
 
-const watchedProps = computed((): TurnstileProps => resolvedProps.value);
-
 const options = computed((): RenderParameters => {
-  // exclude logLevel since it is used only for local logging
-  const { sitekey, logLevel: _logLevel, ...rest } = watchedProps.value;
+  const { sitekey, logLevel: _logLevel, ...rest } = resolvedProps.value;
   void _logLevel;
   return {
     sitekey: sitekey ?? TEST_SITEKEY_ALWAYS_PASS,
@@ -142,6 +135,9 @@ function remove() {
         if (isLogLevel('debug')) console.debug('Turnstile is removing container.');
         window.turnstile.remove(widgetId.value);
         widgetId.value = null;
+        if (isLogLevel('debug')) console.debug('Turnstile removed container.');
+      } else if (widgetRef.value) {
+        window.turnstile.remove(widgetRef.value);
         if (isLogLevel('debug')) console.debug('Turnstile removed container.');
       }
     }
@@ -211,13 +207,9 @@ onUnmounted(() => {
 
 watch(
   watchedWidgetOptions,
-  async (_, __, onCleanup) => {
-    let cancelled = false;
-    onCleanup(() => (cancelled = true));
-    if (error.value) return;
+  async () => {
     remove();
     await render();
-    if (cancelled) return;
   },
   { deep: true }
 );
