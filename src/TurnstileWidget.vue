@@ -10,7 +10,7 @@ import { type RenderParameters } from '@/turnstile.ts'
 import { DEFAULT_PROPS } from '@/setup.ts'
 import { TurnstileOptionsKey, type TurnstilePluginOptions } from '@/plugin'
 
-const props = withDefaults(defineProps<TurnstileProps>(), DEFAULT_PROPS);
+const props = defineProps<TurnstileProps>();
 const pluginOptions = inject(
   TurnstileOptionsKey,
   {} as TurnstilePluginOptions,
@@ -22,9 +22,12 @@ const resolvedProps = computed((): TurnstileProps => {
   };
   void _modelValue;
   return {
+    ...DEFAULT_PROPS,
     ...(pluginOptions as TurnstilePluginOptions),
-    ...propsWithoutModel,
-  };
+    ...Object.fromEntries(
+      Object.entries(propsWithoutModel).filter(([, v]) => v !== undefined),
+    ),
+  } as TurnstileProps;
 });
 const resolvedSitekey = computed(() => resolvedProps.value.sitekey);
 
