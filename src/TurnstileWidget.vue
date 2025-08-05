@@ -15,10 +15,17 @@ const pluginOptions = inject(
   TurnstileOptionsKey,
   {} as TurnstilePluginOptions,
 );
-const resolvedProps = computed((): TurnstileProps => ({
-  ...(pluginOptions as TurnstilePluginOptions),
-  ...props,
-}));
+const resolvedProps = computed((): TurnstileProps => {
+  // Exclude modelValue to prevent watch loops when the v-model changes
+  const { modelValue: _modelValue, ...propsWithoutModel } = props as TurnstileProps & {
+    modelValue?: unknown
+  };
+  void _modelValue;
+  return {
+    ...(pluginOptions as TurnstilePluginOptions),
+    ...propsWithoutModel,
+  };
+});
 const resolvedSitekey = computed(() => resolvedProps.value.sitekey);
 
 const model = defineModel<string | null>({ required: true });

@@ -33,4 +33,16 @@ describe('TurnstileWidget', () => {
     expect(typeof vm.execute).toBe('function')
     expect(typeof vm.remove).toBe('function')
   })
+
+  it('does not re-render when modelValue changes', async () => {
+    const wrapper = mount(TurnstileWidget, {
+      props: { sitekey: 'test-key', modelValue: null },
+    })
+    await flushPromises()
+    const win = window as unknown as { turnstile: Turnstile }
+    const renderSpy = vi.spyOn(win.turnstile, 'render')
+    await wrapper.setProps({ modelValue: 'token' })
+    await flushPromises()
+    expect(renderSpy).toHaveBeenCalledTimes(1)
+  })
 })
