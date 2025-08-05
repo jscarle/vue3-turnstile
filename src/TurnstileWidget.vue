@@ -28,7 +28,16 @@ const resolvedProps = computed((): TurnstileProps => {
     ),
   } as TurnstileProps;
 });
-const resolvedSitekey = computed(() => resolvedProps.value.sitekey);
+
+const watchedWidgetOptions = computed(() => ({
+  action: resolvedProps.value.action,
+  cData: resolvedProps.value.cData,
+  theme: resolvedProps.value.theme,
+  tabindex: resolvedProps.value.tabindex,
+  size: resolvedProps.value.size,
+  'feedback-enabled': resolvedProps.value['feedback-enabled'],
+  language: resolvedProps.value.language,
+}));
 
 const model = defineModel<string | null>({ required: true });
 
@@ -201,19 +210,21 @@ onUnmounted(() => {
 });
 
 watch(
-  () => watchedProps.value,
-  async (newVal, oldVal, onCleanup) => {
+  watchedWidgetOptions,
+  async (_, __, onCleanup) => {
     let cancelled = false;
     onCleanup(() => (cancelled = true));
+    if (error.value) return;
     remove();
     await render();
     if (cancelled) return;
-  }
+  },
+  { deep: true }
 );
 </script>
 
 <template>
-  <template v-if="resolvedSitekey">
+  <template v-if="resolvedProps.sitekey">
     <template v-if="isLoading">
       <slot name="loading">
         <div role="status" aria-busy="true" aria-live="polite">Loading...</div>

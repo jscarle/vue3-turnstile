@@ -1,6 +1,6 @@
 {
   "name": "@jscarle/vue3-turnstile",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A Vue 3.5 TypeScript component for Cloudflare's Turnstile.",
   "private": false,
   "main": "./dist/vue3-turnstile.umd.js",
