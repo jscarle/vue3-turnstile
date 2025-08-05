@@ -16,7 +16,6 @@ const pluginOptions = inject(
   {} as TurnstilePluginOptions,
 );
 const resolvedProps = computed((): TurnstileProps => {
-  // Exclude modelValue to prevent watch loops when the v-model changes
   const { modelValue: _modelValue, ...propsWithoutModel } = props as TurnstileProps & {
     modelValue?: unknown
   };
