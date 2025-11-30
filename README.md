@@ -154,6 +154,25 @@ if (!result.success) {
 
 Tokens must be validated within 300 seconds and cannot be reused.
 
+## FAQ
+
+### Why do I see browser console warnings from `challenges.cloudflare.com`?
+
+Cloudflare's Turnstile script is injected from `https://challenges.cloudflare.com` and
+manages its own lifecycle inside an iframe. When it initializes, browsers may log
+messages such as:
+
+- `[Violation] 'readystatechange' handler took XXXms`
+- `Avoid using document.write()`
+- `Request for the Private Access Token challenge.`
+- `Note that 'script-src' was not explicitly set, so 'default-src' is used as a fallback.`
+
+These notices come directly from Cloudflare's challenge code and are not emitted by the
+Vue component. They typically indicate performance or Content Security Policy details of
+the third-party widget rather than problems in your application. If you want to reduce
+the CSP warning, add an explicit `script-src` directive that includes
+`https://challenges.cloudflare.com` so the browser does not fall back to `default-src`.
+
 ## Contributing
 
 Issues and pull requests are welcome. Feel free to open a ticket if you discover
