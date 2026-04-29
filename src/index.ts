@@ -6,12 +6,12 @@ export type {
   LogLevel,
   TurnstileProps,
   TurnstileSharedOptions,
-} from './types.ts'
+} from './types'
 export {
   TEST_SITEKEY_ALWAYS_PASS,
   TEST_SITEKEY_ALWAYS_BLOCK,
   TEST_SITEKEY_ALWAYS_PASS_INVISIBLE,
   TEST_SITEKEY_ALWAYS_BLOCK_INVISIBLE,
   TEST_SITEKEY_CHALLENGE,
-} from './types.ts'
-export type { Theme, WidgetSize, FailureRetryMode, AppearanceMode, RefreshExpiredMode, RefreshTimeoutMode, ExecutionMode } from './turnstile.ts'
+} from './types'
+export type { Theme, WidgetSize, FailureRetryMode, AppearanceMode, RefreshExpiredMode, RefreshTimeoutMode, ExecutionMode } from './turnstile'

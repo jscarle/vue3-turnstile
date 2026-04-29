@@ -1,7 +1,7 @@
 import { mount, flushPromises } from '@vue/test-utils'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { TurnstileWidget, TurnstileOptionsKey } from '../index'
-import type { Turnstile } from '../turnstile.ts'
+import type { Turnstile } from '../turnstile'
 
 vi.mock('@unhead/vue', () => ({
   useScript: () => ({
@@ -53,5 +53,55 @@ describe('TurnstileWidget', () => {
       expect.anything(),
       expect.objectContaining({ sitekey: 'plugin-key', theme: 'dark' }),
     )
+  })
+
+  it('supports event-only usage without v-model', async () => {
+    const win = window as unknown as { turnstile: Turnstile }
+    const success = vi.fn()
+
+    mount(TurnstileWidget, {
+      props: { sitekey: 'test-key', onSuccess: success },
+    })
+    await flushPromises()
+
+    const renderSpy = vi.mocked(win.turnstile.render)
+    const renderOptions = renderSpy.mock.calls[0]?.[1]
+    renderOptions?.callback?.('token')
+
+    expect(success).toHaveBeenCalledWith('token')
+  })
+
+  it('rerenders when render options change', async () => {
+    const win = window as unknown as { turnstile: Turnstile }
+    const renderSpy = vi.mocked(win.turnstile.render)
+
+    const wrapper = mount(TurnstileWidget, {
+      props: { sitekey: 'first-key', modelValue: null },
+    })
+    await flushPromises()
+
+    await wrapper.setProps({ sitekey: 'second-key' })
+    await flushPromises()
+
+    expect(win.turnstile.remove).toHaveBeenCalledWith('widget-id')
+    expect(renderSpy).toHaveBeenCalledTimes(2)
+    expect(renderSpy.mock.calls[1]?.[1]).toEqual(
+      expect.objectContaining({ sitekey: 'second-key' }),
+    )
+  })
+
+  it('does not render without a sitekey', async () => {
+    const win = window as unknown as { turnstile: Turnstile }
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+
+    mount(TurnstileWidget, {
+      props: { modelValue: null },
+    })
+    await flushPromises()
+
+    expect(win.turnstile.render).not.toHaveBeenCalled()
+    expect(warnSpy).toHaveBeenCalledWith('Turnstile site key was not found.')
+
+    warnSpy.mockRestore()
   })
 })
