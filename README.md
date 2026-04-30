@@ -1,8 +1,8 @@
 # vue3-turnstile
 
-A Vue 3.5.17 TypeScript component for Cloudflare's Turnstile.
+A Vue 3.5 TypeScript component for Cloudflare's Turnstile.
 
-Requires **Vue 3.5.17** or later and **@unhead/vue 2.0.12** or later.
+Requires **Vue 3.5.17** or later and **@unhead/vue 2.x** (2.0.12+) or **3.x** (3.1.0+).
 
 [![CI](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml/badge.svg)](https://github.com/jscarle/vue3-turnstile/actions/workflows/ci.yml)
 
@@ -22,7 +22,9 @@ npm install @jscarle/vue3-turnstile
 
 ```vue
 <script setup lang="ts">
+import { ref } from 'vue'
 import { TurnstileWidget } from '@jscarle/vue3-turnstile'
+
 const token = ref<string | null>(null)
 </script>
 
@@ -59,6 +61,10 @@ createApp(App).use(TurnstilePlugin, {
 Global defaults passed to the plugin apply to every widget. Component props take
 precedence over these defaults, enabling per-instance configuration.
 
+`v-model` is optional. Use it when you want the current token in local component
+state, or use the `success` event directly when you only need to submit the token
+to your server.
+
 ### Test sitekeys
 
 The library exports constants for Cloudflare's test sitekeys:
@@ -75,21 +81,24 @@ The library exports constants for Cloudflare's test sitekeys:
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `sitekey` | `string` | Test key that always passes | Cloudflare Turnstile site key |
+| `sitekey` | `string` | - | Cloudflare Turnstile site key |
 | `action` | `string` | - | Widget analytics action name |
 | `cData` | `string` | - | Custom payload returned on validation |
 | `logLevel` | `'debug' \| 'info' \| 'warn' \| 'error'` | `info` | Browser log level |
-| `language` | `Language` | `auto` | Widget language |
+| `language` | `Language` | `auto` | Widget language. Regional codes use Cloudflare's lower-case format, such as `en-us` or `pt-br` |
 | `theme` | `'auto' \| 'light' \| 'dark'` | `auto` | Widget theme |
 | `tabindex` | `number` | `0` | iframe tabindex |
 | `size` | `'normal' \| 'compact' \| 'flexible'` | `normal` | Widget size |
 | `retry` | `'never' \| 'auto'` | `auto` | Automatically retry on failure |
 | `retry-interval` | `number` | `8000` | Milliseconds between retries |
 | `appearance` | `'always' \| 'execute' \| 'interaction-only'` | `always` | When the widget is visible |
+| `response-field` | `boolean` | `true` | Create a hidden form field containing the token |
+| `response-field-name` | `string` | `cf-turnstile-response` | Hidden token field name |
 | `refresh-expired` | `'never' \| 'manual' \| 'auto'` | `auto` | Refresh behavior when token expires |
 | `refresh-timeout` | `'never' \| 'manual' \| 'auto'` | `auto` | Refresh behavior on timeout |
 | `execution` | `'render' \| 'execute'` | `render` | When to obtain the widget token |
 | `feedback-enabled` | `boolean` | `true` | Allow Cloudflare feedback |
+| `offlabel-show-privacy` | `boolean` | `true` | Show the privacy link for unbranded Turnstile widgets |
 
 ### Events
 
@@ -122,6 +131,7 @@ function onError(message: string) {
 
 <template>
   <TurnstileWidget
+    sitekey="your-site-key"
     @success="onSolved"
     @error="onError"
     @expired="() => console.log('expired')"
@@ -131,28 +141,57 @@ function onError(message: string) {
 </template>
 ```
 
+### Component methods
+
+Template refs expose the following methods:
+
+| Method | Description |
+| --- | --- |
+| `render()` | Render the widget manually |
+| `execute()` | Execute the widget when `execution` is `execute` |
+| `reset()` | Reset the current widget |
+| `remove()` | Remove the current widget from the DOM |
 
 ## Token Verification
 
 Validate the response token on your server by sending it to Cloudflare's [`siteverify` endpoint](https://developers.cloudflare.com/turnstile/get-started/server-side-validation/):
 
 ```ts
-const params = new URLSearchParams()
-params.append('secret', 'your-secret-key')
-params.append('response', token)
+async function validateTurnstileToken(token: string) {
+  const formData = new FormData()
+  formData.append('secret', 'your-secret-key')
+  formData.append('response', token)
 
-const result = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-  method: 'POST',
-  body: params,
-})
-  .then(r => r.json())
+  const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    method: 'POST',
+    body: formData,
+  })
 
-if (!result.success) {
-  // token is invalid
+  return response.json() as Promise<{ success: boolean; 'error-codes'?: string[] }>
 }
 ```
 
-Tokens must be validated within 300 seconds and cannot be reused.
+Server-side validation is required. Tokens must be validated within 300 seconds
+and cannot be reused.
+
+## FAQ
+
+### Why do I see browser console warnings from `challenges.cloudflare.com`?
+
+Cloudflare's Turnstile script is injected from `https://challenges.cloudflare.com` and
+manages its own lifecycle inside an iframe. When it initializes, browsers may log
+messages such as:
+
+- `[Violation] 'readystatechange' handler took XXXms`
+- `Avoid using document.write()`
+- `Request for the Private Access Token challenge.`
+- `Note that 'script-src' was not explicitly set, so 'default-src' is used as a fallback.`
+
+These notices come directly from Cloudflare's challenge code and are not emitted by the
+Vue component. They typically indicate performance or Content Security Policy details of
+the third-party widget rather than problems in your application. If you want to reduce
+the CSP warning, add an explicit `script-src` directive that includes
+`https://challenges.cloudflare.com` so the browser does not fall back to `default-src`.
 
 ## Contributing
 

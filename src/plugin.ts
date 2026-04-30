@@ -1,6 +1,6 @@
 import type { App, Plugin, InjectionKey } from 'vue'
 import TurnstileWidget from './TurnstileWidget.vue'
-import type { TurnstileProps } from './types.ts'
+import type { TurnstileProps } from './types'
 
 export type TurnstilePluginOptions = Partial<TurnstileProps>
 

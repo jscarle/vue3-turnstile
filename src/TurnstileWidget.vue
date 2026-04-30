@@ -4,11 +4,10 @@ import { useScript } from '@unhead/vue';
 import {
   type LogLevel,
   type TurnstileProps,
-  TEST_SITEKEY_ALWAYS_PASS,
-} from '@/types.ts'
-import { type RenderParameters } from '@/turnstile.ts'
-import { DEFAULT_PROPS } from '@/setup.ts'
-import { TurnstileOptionsKey, type TurnstilePluginOptions } from '@/plugin'
+} from './types'
+import { type RenderParameters } from './turnstile'
+import { DEFAULT_PROPS } from './setup'
+import { TurnstileOptionsKey, type TurnstilePluginOptions } from './plugin'
 
 const props = defineProps<TurnstileProps>();
 const pluginOptions = inject(
@@ -26,16 +25,26 @@ const resolvedProps = computed((): TurnstileProps => {
 });
 
 const watchedWidgetOptions = computed(() => ({
-  action: props.action,
-  cData: props.cData,
-  theme: props.theme,
-  tabindex: props.tabindex,
-  size: props.size,
-  'feedback-enabled': props['feedback-enabled'],
-  language: props.language,
+  sitekey: resolvedProps.value.sitekey,
+  action: resolvedProps.value.action,
+  cData: resolvedProps.value.cData,
+  theme: resolvedProps.value.theme,
+  tabindex: resolvedProps.value.tabindex,
+  size: resolvedProps.value.size,
+  retry: resolvedProps.value.retry,
+  'retry-interval': resolvedProps.value['retry-interval'],
+  language: resolvedProps.value.language,
+  appearance: resolvedProps.value.appearance,
+  'response-field': resolvedProps.value['response-field'],
+  'response-field-name': resolvedProps.value['response-field-name'],
+  'refresh-expired': resolvedProps.value['refresh-expired'],
+  'refresh-timeout': resolvedProps.value['refresh-timeout'],
+  execution: resolvedProps.value.execution,
+  'feedback-enabled': resolvedProps.value['feedback-enabled'],
+  'offlabel-show-privacy': resolvedProps.value['offlabel-show-privacy'],
 }));
 
-const model = defineModel<string | null>({ required: true });
+const model = defineModel<string | null>({ default: null });
 
 const emit = defineEmits<{
   (e: 'success', response: string): void;
@@ -99,11 +108,14 @@ const timeoutCallback = () => {
   model.value = null;
 };
 
-const options = computed((): RenderParameters => {
+const options = computed((): RenderParameters | null => {
   const { sitekey, logLevel: _logLevel, ...rest } = resolvedProps.value;
   void _logLevel;
+  if (!sitekey) {
+    return null;
+  }
   return {
-    sitekey: sitekey ?? TEST_SITEKEY_ALWAYS_PASS,
+    sitekey,
     ...rest,
     callback,
     'error-callback': errorCallback,
@@ -122,8 +134,9 @@ function reset() {
 
 /** Execute the Turnstile widget. */
 function execute() {
-  if (typeof window !== 'undefined' && window.turnstile && window.turnstile.execute && widgetId.value) {
-    window.turnstile.execute(widgetId.value, options.value);
+  const renderOptions = options.value;
+  if (typeof window !== 'undefined' && window.turnstile && window.turnstile.execute && widgetId.value && renderOptions) {
+    window.turnstile.execute(widgetId.value, renderOptions);
   }
 }
 
@@ -150,6 +163,11 @@ function remove() {
 async function render() {
   try {
     error.value = null;
+    const renderOptions = options.value;
+    if (!renderOptions) {
+      if (isLogLevel('warn')) console.warn('Turnstile site key was not found.');
+      return;
+    }
     if (mustInitialize.value && !isInitialized.value) {
       isInitialized.value = true;
       await turnstile.load();
@@ -159,7 +177,7 @@ async function render() {
     if (widgetRef.value) {
       if (typeof window !== 'undefined' && window.turnstile && window.turnstile.render) {
         if (isLogLevel('debug')) console.debug('Turnstile is rendering.');
-        widgetId.value = window.turnstile.render(widgetRef.value, options.value);
+        widgetId.value = window.turnstile.render(widgetRef.value, renderOptions);
       }
     }
     if (isLogLevel('debug')) console.debug('Turnstile loaded.');

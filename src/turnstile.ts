@@ -140,7 +140,7 @@ export interface RenderParameters {
 
   /**
    * Optional. Language to display.
-   * Must be `auto` (default) to use the visitor's language, or an ISO 639-1 code such as `en` or `en-US`.
+   * Must be `auto` (default) to use the visitor's language, or a supported language code such as `en` or `en-us`.
    */
   language?: string;
 
@@ -181,6 +181,12 @@ export interface RenderParameters {
    * @default true
    */
   'feedback-enabled'?: boolean;
+
+  /**
+   * Optional. Displays the privacy link for unbranded Turnstile widgets.
+   * @default true
+   */
+  'offlabel-show-privacy'?: boolean;
 
   /**
    * Optional. Controls when to obtain the token of the widget.
