@@ -90,6 +90,22 @@ describe('TurnstileWidget', () => {
     )
   })
 
+  it('does not rerender when only modelValue changes', async () => {
+    const win = window as unknown as { turnstile: Turnstile }
+    const renderSpy = vi.mocked(win.turnstile.render)
+
+    const wrapper = mount(TurnstileWidget, {
+      props: { sitekey: 'test-key', modelValue: null },
+    })
+    await flushPromises()
+
+    await wrapper.setProps({ modelValue: 'token' })
+    await flushPromises()
+
+    expect(win.turnstile.remove).not.toHaveBeenCalled()
+    expect(renderSpy).toHaveBeenCalledTimes(1)
+  })
+
   it('does not render without a sitekey', async () => {
     const win = window as unknown as { turnstile: Turnstile }
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined)

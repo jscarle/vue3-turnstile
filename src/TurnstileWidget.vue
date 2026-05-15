@@ -14,12 +14,32 @@ const pluginOptions = inject(
   TurnstileOptionsKey,
   {} as TurnstilePluginOptions,
 );
+const explicitPropOverrides = computed(() => ({
+  sitekey: props.sitekey,
+  action: props.action,
+  cData: props.cData,
+  theme: props.theme,
+  tabindex: props.tabindex,
+  size: props.size,
+  retry: props.retry,
+  'retry-interval': props['retry-interval'],
+  language: props.language,
+  appearance: props.appearance,
+  'response-field': props['response-field'],
+  'response-field-name': props['response-field-name'],
+  'refresh-expired': props['refresh-expired'],
+  'refresh-timeout': props['refresh-timeout'],
+  execution: props.execution,
+  'feedback-enabled': props['feedback-enabled'],
+  'offlabel-show-privacy': props['offlabel-show-privacy'],
+  logLevel: props.logLevel,
+}));
 const resolvedProps = computed((): TurnstileProps => {
   return {
     ...DEFAULT_PROPS,
     ...(pluginOptions as TurnstilePluginOptions),
     ...Object.fromEntries(
-      Object.entries(props).filter(([, v]) => v !== undefined),
+      Object.entries(explicitPropOverrides.value).filter(([, v]) => v !== undefined),
     ),
   } as TurnstileProps;
 });
